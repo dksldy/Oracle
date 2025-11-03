@@ -72,14 +72,20 @@ COMMENT ON COLUMN MEMBER2.MEMBER_NAME IS '회원이름';
 -- 유형확인
 DESC MEMBER2;
 --===============================================================================
--- *5 제약조건(NOT NULL, PK, UQ, FK, CHECK)
--- 자바 : NULL String name = null; // 힙 영역에 있는 객체를 어떤것도 가르키고 있지 않다.
--- 오라클 : NULL => 값을 넣을수 있는 상태 (넣지 않아도 실행에 문제는 없음), (Defalut)
---         NOT NULL => 데이터에 NULL을 허용하지 않음 (값을 무조건 넣어야함)
---         UNIQUE => 중복 값 허용 X
---         PRIMARY KEY => NULL과 중복 값을 허용하지 않음(컬럼의 고유 식별자로 사용하기 위해)
---         FOREIGN KEY => 참조되는 테이블의 컬럼의 값이 존재하면 허용 (두개테이블 : 본국, 외국)
---         CHECK => 저장가능한 데이터 값의 범위나 조건을 지정하여 설정한 값만 허용
+/*
+     *5 제약조건(NOT NULL, PK, UQ, FK, CHECK)
+     자바 : NULL String name = null; // 힙 영역에 있는 객체를 어떤것도 가르키고 있지 않다.
+     오라클 : NULL => 값을 넣을수 있는 상태 (넣지 않아도 실행에 문제는 없음), (Defalut)
+             NOT NULL => 데이터에 NULL을 허용하지 않음 (값을 무조건 넣어야함)
+             UNIQUE => 중복 값 허용 X
+             PRIMARY KEY => NULL과 중복 값을 허용하지 않음(컬럼의 고유 식별자로 사용하기 위해)
+             FOREIGN KEY => 참조되는 테이블의 컬럼의 값이 존재하면 허용 (두개테이블 : 본국, 외국)
+             CHECK => 저장가능한 데이터 값의 범위나 조건을 지정하여 설정한 값만 허용
+    
+    [구조]
+    CONSTRAINT 제약조건별칭 제약조건타입 (컬럼명)
+    
+*/
 -- 테이블 삭제
 DROP TABLE MEMBER;
 -- 테이블 생성
@@ -112,7 +118,7 @@ DROP TABLE USER_UNIQUE;
  GENDER VARCHAR2(10),
  PHONE VARCHAR2(30),
  EMAIL VARCHAR2(50),
- CONSTRAINT UK_USER_ID UNIQUE(USER_ID)      -- CONSTRATINT 생략 가능?
+ CONSTRAINT UK_USER_ID UNIQUE(USER_ID)
  );
 INSERT INTO USER_UNIQUE VALUES(1, 'user01', 'pass01', '홍길동', '남', '010-1234-5678', 'hong123@kh.or.kr');
 INSERT INTO USER_UNIQUE VALUES(1, NULL, 'pass01', '홍길동', '남', '010-1234-5678', 'hong123@kh.or.kr');
@@ -148,7 +154,7 @@ DROP TABLE USER_PRIMARYKEY;
  GENDER VARCHAR2(10)CHECK(GENDER IN('남','여')),
  PHONE VARCHAR2(30),
  EMAIL VARCHAR2(50),
- CONSTRAINT PK_USER_PRIMARYKEY_NO PRIMARY KEY(USER_NO, USER_ID)    
+ CONSTRAINT PK_USER_PRIMARYKEY_NO PRIMARY KEY(USER_NO, USER_ID)
 -- 두개 컬럼 묶기 => PRIMARY KEY 제약조건 설정
  );
 
@@ -266,6 +272,7 @@ DELETE FROM USER_GRADE WHERE GRADE_CODE = 10;
 --=========================================================================================
 -- 11 SUBQURY 활용한 TABLE 생성(JOIN)
 -- 서브쿼리를 활용하여 새로운 테이블 생성시에는 제약조건 복사가 되지 않는다.(NOT NULL 예외)
+DROP TABLE EMPLOYEE_COPY;
 CREATE TABLE EMPLOYEE_COPY
     AS SELECT EMP_ID, EMP_NAME, SALARY, DEPT_TITLE, JOB_NAME
     FROM EMPLOYEE
@@ -275,24 +282,3 @@ CREATE TABLE EMPLOYEE_COPY
 SELECT * FROM EMPLOYEE_COPY;
 
 SELECT * FROM USER_CONSTRAINTS WHERE TABLE_NAME = 'EMPLOYEE_COPY';
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
